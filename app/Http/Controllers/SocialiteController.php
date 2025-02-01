@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Services\SocialiteUserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
+    protected $socialiteUserService;
+    public function __construct(SocialiteUserService $socialiteUserService)
+    {
+        $this->socialiteUserService = $socialiteUserService;
+    }
+
     //認証のリダイレクト処理
     public function redirect($provider)
     {
@@ -20,8 +27,12 @@ class SocialiteController extends Controller
         $user = Socialite::driver($provider)->user();
         dd($user);
 
-        //socialiteUserServiceクラスのインスタンスを生成してfindOrCreateUserメソッドを呼び出す
-        $socialiteUserService = new SocialiteUserService();
-        $socialiteUserService->findOrCreateUser($user, $provider);
+        //socialiteUserServiceクラスのインスタンスを生成してfindOrCreateUserメソッドを呼び出して登録
+        $user = $this->socialiteUserService->findOrCreateUser($user, $provider);
+
+        //ログイン処理
+        Auth::login($user, true);
+
+        return redirect('/home');
     }
 }
