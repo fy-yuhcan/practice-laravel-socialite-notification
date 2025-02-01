@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\SocialiteUserService;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -18,5 +19,9 @@ class SocialiteController extends Controller
     {
         $user = Socialite::driver($provider)->user();
         dd($user);
+
+        //socialiteUserServiceクラスのインスタンスを生成してfindOrCreateUserメソッドを呼び出す
+        $socialiteUserService = new SocialiteUserService();
+        $socialiteUserService->findOrCreateUser($user, $provider);
     }
 }
