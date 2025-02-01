@@ -25,7 +25,6 @@ class SocialiteController extends Controller
     public function callback($provider)
     {
         $user = Socialite::driver($provider)->user();
-        dd($user);
 
         //socialiteUserServiceクラスのインスタンスを生成してfindOrCreateUserメソッドを呼び出して登録
         $user = $this->socialiteUserService->findOrCreateUser($user, $provider);

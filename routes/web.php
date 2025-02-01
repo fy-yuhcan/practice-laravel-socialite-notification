@@ -6,7 +6,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('auth');
 
 Route::get('/login', function () {
     return view('login');
@@ -18,4 +18,4 @@ Route::get('/home', function () {
 
 //Google認証のルーティング
 Route::get('/redirect/{provider}', [SocialiteController::class, 'redirect']);
-Route::get('/callback/{provider}', [SocialiteController::class, 'callback']);
+Route::get('/login/{provider}/callback', [SocialiteController::class, 'callback']);
